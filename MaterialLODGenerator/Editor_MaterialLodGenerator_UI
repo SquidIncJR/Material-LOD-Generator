@@ -1,9 +1,6 @@
-// Copyright (c) Pixel Toys Ltd.
- 
+
 using UnityEngine;
-using PT;
 using UnityEditor;
-using UnityEngine.SceneManagement;
 using Debug = UnityEngine.Debug;
 
 
