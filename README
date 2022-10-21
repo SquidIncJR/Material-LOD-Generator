@@ -1,0 +1,4 @@
+Work inprogress currently grabbing all the assets in the scene figuring out a bug on why some of the assets that it returns are considered null when checking in scene the
+assets look to be Rendermeshes so there seems to be incorrect type being picked up.
+
+Once the null bug has been fixed the rest of the commented out code should work
