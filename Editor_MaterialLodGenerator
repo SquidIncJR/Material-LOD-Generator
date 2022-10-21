@@ -1,0 +1,88 @@
+using UnityEngine;
+using System.Collections.Generic;
+using UnityEditor;
+using Debug = UnityEngine.Debug;
+
+public class Editor_MaterialLodGenerator : Editor
+{
+    private static List<GameObject> gameObjects;
+    private static List<GameObject> LODGroups;
+    public static void GetAssets(Object SelectedScene)
+    {
+        if (!SelectedScene) return;
+
+        var sceneType = SelectedScene.GetType();
+        if ( sceneType == typeof(SceneAsset))
+        {
+            gameObjects = new List<GameObject>();
+            //EditorSceneManager.SaveOpenScenes();
+            //EditorSceneManager.OpenScene(AssetDatabase.GetAssetPath(SelectedScene));
+            Object[] assetlist = GameObject.FindObjectsOfTypeAll(typeof(GameObject));
+            
+            foreach (Object o in assetlist)
+            {
+                if (o.GetType() == typeof(GameObject))
+                {
+                    GameObject go = o as GameObject;
+                    if (go.GetComponent<LODGroup>())
+                    {
+                        //gets the LODGroup
+                        LOD[] rootLODGroup = go.GetComponent<LODGroup>().GetLODs();
+
+                        // gets the length
+                        int numOfLODS = rootLODGroup.Length -1;
+
+                        Renderer[] lastLOD = rootLODGroup[numOfLODS].renderers;
+                        //Debug.Log(go);
+                        for (int i = 0; i < lastLOD.Length; i++)
+                        {
+                            if (lastLOD[i] == null)
+                            {
+                                foreach (var name in rootLODGroup)
+                                {
+                                    Debug.Log(name);
+                                }
+                                Debug.Log(lastLOD[i]);
+                                Debug.Log(go);
+                                
+                            }
+                            //get material from UI
+                            // if (lastLOD[i].material.shader.name.Contains("Dynamic"))
+                            // {
+                            //     //check to see if LOD version of material already exists
+                            //     // if (AssetDatabase.FindAssets(lastLOD[i].material.name + "_LOD") == null)
+                            //     // {
+                            //     //     var originalMaterial = AssetDatabase.FindAssets("m:" + lastLOD[i].material.name);
+                            //     //     foreach (string VARIABLE in originalMaterial)
+                            //     //     {
+                            //     //         Debug.Log(AssetDatabase.GUIDToAssetPath(VARIABLE));                                        
+                            //     //     }
+                            //
+                            //         //AssetDatabase.CopyAsset(originalMaterial);
+                            //     //}
+                            //     //need to create a copy of the exisiting material with the new shader
+                            //     
+                            //     //assign existing or new one
+                            //     
+                            //     //lastLOD[i].material = new Material(LOD_Dynamic);                                
+                            // }
+                            //
+                            // if (lastLOD[i].material.shader.name.Contains("Static"))
+                            // {
+                            //     //lastLOD[i].material = new Material(LOD_Static);                                
+                            // }
+                        }
+                        gameObjects.Add(go);
+                    }
+                }
+            }
+            
+            Debug.Log(gameObjects.Count);
+        }
+        else
+        {
+            Debug.Log("Object was not of type Scene");
+        }
+    }
+
+}
