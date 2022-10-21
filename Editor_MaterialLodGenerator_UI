@@ -1,0 +1,42 @@
+// Copyright (c) Pixel Toys Ltd.
+ 
+using UnityEngine;
+using PT;
+using UnityEditor;
+using UnityEngine.SceneManagement;
+using Debug = UnityEngine.Debug;
+
+
+public class Editor_MaterialLodGenerator_UI : EditorWindow
+{
+    public Object BaseScene;
+
+    private static Shader LOD_Dynamic;
+    private static Shader LOD_Static;
+    
+    [MenuItem("Tools/SceneLODGenerator")]
+    static void Init()
+    {
+        LOD_Static = Shader.Find("Custom/Static_LOD");
+        LOD_Dynamic = Shader.Find("Custom/Dynamic_LOD");
+        
+        
+        Editor_MaterialLodGenerator_UI window =
+            (Editor_MaterialLodGenerator_UI)EditorWindow.GetWindow(typeof(Editor_MaterialLodGenerator_UI));
+        window.Show();
+
+    }
+
+    void OnGUI()
+    {
+        GUILayout.Label("Material Lod Generator", EditorStyles.boldLabel);
+        BaseScene = EditorGUILayout.ObjectField("Scene To LOD Generate", BaseScene, typeof(Object), false);
+        if (GUILayout.Button("Generate LOD Materials"))
+        {
+            Editor_MaterialLodGenerator.GetAssets(BaseScene);
+            Debug.Log("Generating LODS");
+        }
+        // GUILayout.Label(LOD_Static.name, EditorStyles.boldLabel);
+        // GUILayout.Label(LOD_Dynamic.name, EditorStyles.boldLabel);
+    }
+}
